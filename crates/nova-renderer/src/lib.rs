@@ -4,6 +4,8 @@
 //! The current milestone produces a deterministic render scene; a GPU backend
 //! and Android Surface integration are follow-up milestones.
 
+pub mod gles;
+
 use nova_core::Id;
 use nova_math::{Transform, Vec3};
 use nova_world::{EnvironmentSettings, LightComponent, MeshComponent, Place};

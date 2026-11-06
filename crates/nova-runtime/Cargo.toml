@@ -5,7 +5,12 @@ edition.workspace = true
 authors.workspace = true
 license.workspace = true
 
+[lib]
+name = "nova_runtime"
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
+experience-nova-obby = { path = "../../experiences/nova_obby" }
 nova-core = { path = "../nova-core" }
 nova-math = { path = "../nova-math" }
 nova-physics = { path = "../nova-physics" }

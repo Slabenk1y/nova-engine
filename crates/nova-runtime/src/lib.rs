@@ -9,6 +9,8 @@ use nova_ui::MobileTouchControls;
 use nova_world::Place;
 use std::collections::HashMap;
 
+pub mod android;
+
 /// An active runtime session running a specific place.
 pub struct RuntimeSession {
     pub place: Place,
@@ -80,18 +82,55 @@ impl RuntimeSession {
         // Update animation state machine
         self.anim_state.update(dt, &self.character);
 
+        // Check triggers: checkpoints, lava hazard, finish area
+        let mut hit_lava = false;
+        let mut new_spawn = None;
+        let mut completed = false;
+
+        for entity in self.place.entities.values() {
+            if let Some(rb) = &entity.rigid_body {
+                let dist = (self.character.position - entity.transform.position).length();
+                if entity.tags.contains(&"checkpoint".to_string()) && dist < 3.5 {
+                    new_spawn = Some(Vec3::new(
+                        entity.transform.position.x,
+                        entity.transform.position.y + 1.0,
+                        entity.transform.position.z,
+                    ));
+                }
+                if entity.tags.contains(&"finish".to_string()) && dist < 4.0 {
+                    completed = true;
+                }
+                if entity.tags.contains(&"lava_kill".to_string()) && rb.aabb().contains_point(self.character.position) {
+                    hit_lava = true;
+                }
+            }
+        }
+
+        if let Some(sp) = new_spawn {
+            self.active_spawn_point = sp;
+        }
+        if completed {
+            self.is_completed = true;
+        }
+        if hit_lava {
+            self.respawn();
+        }
+
         // Check if player fell into the abyss
         if self.character.position.y < -30.0 || self.script_context.player_respawn_requested {
             self.respawn();
         }
 
-        // Handle teleport triggers if any
-        if let Some(target) = self.script_context.teleport_target.take() {
-            self.character.position = Vec3::new(target[0], target[1], target[2]);
-            self.character.velocity = Vec3::ZERO;
-        }
-
         self.session_score = self.script_context.player_score;
+    }
+
+    /// Third-person camera position tracking the player.
+    pub fn camera_orbit_position(&self) -> Vec3 {
+        Vec3::new(
+            self.character.position.x,
+            self.character.position.y + 3.5,
+            self.character.position.z + 6.0,
+        )
     }
 }
 

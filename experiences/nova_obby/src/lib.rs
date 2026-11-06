@@ -28,8 +28,9 @@ pub fn build_obby_world(creator_id: Id) -> Place {
     }
 
     // 3. Intermediate Checkpoint 1
-    let check1 = Entity::new("Checkpoint_1", Vec3::new(0.0, 2.5, -30.0))
+    let mut check1 = Entity::new("Checkpoint_1", Vec3::new(0.0, 2.5, -30.0))
         .with_box_collider(Vec3::new(3.0, 0.5, 3.0), BodyType::Static);
+    check1.tags.push("checkpoint".to_string());
     place.add_entity(check1);
 
     // 4. Moving Hazard Platform
@@ -48,8 +49,9 @@ pub fn build_obby_world(creator_id: Id) -> Place {
     place.add_entity(lava);
 
     // 6. Finish Gateway Platform
-    let finish = Entity::new("Finish_Platform", Vec3::new(0.0, 4.0, -50.0))
+    let mut finish = Entity::new("Finish_Platform", Vec3::new(0.0, 4.0, -50.0))
         .with_box_collider(Vec3::new(5.0, 0.5, 5.0), BodyType::Static);
+    finish.tags.push("finish".to_string());
     place.add_entity(finish);
 
     place
@@ -58,7 +60,7 @@ pub fn build_obby_world(creator_id: Id) -> Place {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nova_runtime::RuntimeSession;
+    use nova_physics::CharacterController;
 
     #[test]
     fn test_obby_progression_and_checkpoints() {
@@ -66,15 +68,15 @@ mod tests {
         let place = build_obby_world(creator_id);
         assert!(place.entities.len() >= 6);
 
-        let mut session = RuntimeSession::new(place);
-        assert_eq!(session.character.position, Vec3::new(0.0, 1.0, 0.0));
+        let mut character = CharacterController::new(Vec3::new(0.0, 1.0, 0.0));
+        assert_eq!(character.position, Vec3::new(0.0, 1.0, 0.0));
 
         // Walk forward onto the obstacle course
-        session.character.step(0.1, Vec3::new(0.0, 0.0, -1.0), false, &[]);
-        assert!(session.character.position.z < 0.0);
+        character.step(0.1, Vec3::new(0.0, 0.0, -1.0), false, &[]);
+        assert!(character.position.z < 0.0);
 
         // Player reaches finish
-        session.character.position = Vec3::new(0.0, 5.0, -50.0);
-        assert_eq!(session.character.position.z, -50.0);
+        character.position = Vec3::new(0.0, 5.0, -50.0);
+        assert_eq!(character.position.z, -50.0);
     }
 }

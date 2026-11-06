@@ -4,7 +4,9 @@
 - **Current Milestone**: Minimum Playable Platform & Foundations (Phases 0 - 4 complete).
 - **Workspace Build**: Clean build across all crates and experiences (`cargo check --workspace`).
 - **Tests**: 100% passing tests across all crates and experiences (`cargo test --workspace`).
-- **Android APK**: Successfully compiled, dexed, aligned, and signed at `android/build/outputs/apk/nova-debug.apk`.
+- **Android APK**: Successfully compiled, dexed, aligned, and signed at `android/build/outputs/apk/nova-debug.apk` with bundled native Rust engine libraries (`lib/arm64-v8a/libnova_engine.so`, `lib/x86_64/libnova_engine.so`).
+- **NOVA Obby Gameplay**: Real 3D world with floating platforms, moving hazard, lava floor trigger, dynamic checkpoint updating, finish zone victory detection, and smooth 3rd-person camera orbit tracking.
+- **Android Input & Presentation**: Custom landscape `GLSurfaceView.Renderer` running native step loop and touch overlay featuring an interactive virtual joystick (bottom-left) and jump button (bottom-right).
 
 ## Features Status
 

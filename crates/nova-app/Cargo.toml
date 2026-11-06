@@ -20,7 +20,7 @@ nova-network = { path = "../nova-network" }
 nova-backend = { path = "../nova-backend" }
 nova-creator = { path = "../nova-creator" }
 nova-ui = { path = "../nova-ui" }
-nova-runtime = { path = "../nova-runtime" }
+nova-runtime = { package = "nova-runtime", path = "../nova-runtime" }
 experience-nova-obby = { path = "../../experiences/nova_obby" }
 experience-nova-social-world = { path = "../../experiences/nova_social_world" }
 experience-nova-simulator = { path = "../../experiences/nova_simulator" }

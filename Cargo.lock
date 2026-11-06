@@ -104,7 +104,6 @@ dependencies = [
  "nova-core",
  "nova-math",
  "nova-physics",
- "nova-runtime",
  "nova-scripting",
  "nova-world",
  "serde",
@@ -374,6 +373,7 @@ dependencies = [
 name = "nova-runtime"
 version = "0.1.0"
 dependencies = [
+ "experience-nova-obby",
  "nova-character",
  "nova-core",
  "nova-math",
