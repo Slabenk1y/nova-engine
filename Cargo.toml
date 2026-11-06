@@ -3,6 +3,7 @@ members = [
     "crates/nova-core",
     "crates/nova-math",
     "crates/nova-physics",
+    "crates/nova-renderer",
     "crates/nova-world",
     "crates/nova-character",
     "crates/nova-scripting",
