@@ -116,14 +116,13 @@ impl RenderScene {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use nova_physics::BodyType;
     use nova_world::Entity;
 
     #[test]
     fn extracts_meshes_materials_and_environment() {
         let mut place = Place::new("Render Test", Id::new());
-        let platform = Entity::new("Platform", Vec3::new(1.0, 0.0, 2.0))
-            .with_box_collider(Vec3::new(2.0, 0.5, 2.0), BodyType::Static);
+        let mut platform = Entity::new("Platform", Vec3::new(1.0, 0.0, 2.0));
+        platform.mesh = Some(MeshComponent::Cube { half_extents: Vec3::new(2.0, 0.5, 2.0) });
         place.add_entity(platform);
 
         let scene = RenderScene::from_place(&place);
