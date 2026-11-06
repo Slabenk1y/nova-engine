@@ -1,0 +1,30 @@
+[package]
+name = "nova-app"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "nova-app"
+path = "src/main.rs"
+
+[dependencies]
+nova-core = { path = "../nova-core" }
+nova-math = { path = "../nova-math" }
+nova-physics = { path = "../nova-physics" }
+nova-world = { path = "../nova-world" }
+nova-character = { path = "../nova-character" }
+nova-scripting = { path = "../nova-scripting" }
+nova-network = { path = "../nova-network" }
+nova-backend = { path = "../nova-backend" }
+nova-creator = { path = "../nova-creator" }
+nova-ui = { path = "../nova-ui" }
+nova-runtime = { package = "nova-runtime", path = "../nova-runtime" }
+experience-nova-obby = { path = "../../experiences/nova_obby" }
+experience-nova-social-world = { path = "../../experiences/nova_social_world" }
+experience-nova-simulator = { path = "../../experiences/nova_simulator" }
+experience-nova-racing = { path = "../../experiences/nova_racing" }
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true

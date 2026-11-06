@@ -1,0 +1,24 @@
+[package]
+name = "nova-runtime"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[lib]
+name = "nova_runtime"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+experience-nova-obby = { path = "../../experiences/nova_obby" }
+nova-core = { path = "../nova-core" }
+nova-math = { path = "../nova-math" }
+nova-physics = { path = "../nova-physics" }
+nova-world = { path = "../nova-world" }
+nova-character = { path = "../nova-character" }
+nova-scripting = { path = "../nova-scripting" }
+nova-network = { path = "../nova-network" }
+nova-ui = { path = "../nova-ui" }
+serde.workspace = true
+serde_json.workspace = true
+jni = "0.21.1"

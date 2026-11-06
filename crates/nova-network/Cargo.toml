@@ -1,0 +1,12 @@
+[package]
+name = "nova-network"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+nova-core = { path = "../nova-core" }
+nova-math = { path = "../nova-math" }
+serde.workspace = true
+serde_json.workspace = true
