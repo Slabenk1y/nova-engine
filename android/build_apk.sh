@@ -54,7 +54,20 @@ cd ../../..
 echo "=== 8. Aligning APK ==="
 $ZIPALIGN -f -p 4 android/build/nova-unaligned.apk android/build/outputs/apk/nova-debug.apk
 
-echo "=== 9. Signing APK ==="
+echo "=== 9. Ensuring Debug Keystore Exists & Signing APK ==="
+mkdir -p android/keystore
+if [ ! -f android/keystore/debug.keystore ]; then
+    keytool -genkeypair -v \
+        -keystore android/keystore/debug.keystore \
+        -storepass android \
+        -alias androiddebugkey \
+        -keypass android \
+        -keyalg RSA \
+        -keysize 2048 \
+        -validity 10000 \
+        -dname "CN=Android Debug,O=Android,C=US"
+fi
+
 $APKSIGNER sign --ks android/keystore/debug.keystore --ks-pass pass:android --ks-key-alias androiddebugkey --key-pass pass:android android/build/outputs/apk/nova-debug.apk
 
 echo "=== 10. Verifying APK Signature and Contents ==="

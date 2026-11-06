@@ -29,4 +29,5 @@ cargo run -p nova-app
 # Build signed Android APK
 ./android/build_apk.sh
 ```
-The resulting verified signed APK is generated at `android/build/outputs/apk/nova-debug.apk`.
+The resulting verified signed APK is generated at `android/build/outputs/apk/nova-debug.apk` (SHA-256: `277d4db287803b82b709774b30cc8e85657b6549872fd18b3602875249aff360`).
+GitHub Actions automatically builds and releases the APK on push/tag via `.github/workflows/android-build-release.yml`.

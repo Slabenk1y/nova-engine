@@ -21,3 +21,4 @@ nova-network = { path = "../nova-network" }
 nova-ui = { path = "../nova-ui" }
 serde.workspace = true
 serde_json.workspace = true
+jni = "0.21.1"

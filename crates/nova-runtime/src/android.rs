@@ -92,92 +92,73 @@ pub fn step_simulation_and_get_render_data(dt: f32) -> RenderBufferPacket {
     }
 }
 
-// Raw JNI function pointer types matching standard jni.h
-#[repr(C)]
-pub struct JNIEnv {
-    functions: *const JNINativeInterface,
-}
-
-#[repr(C)]
-struct JNINativeInterface {
-    _reserved0: *mut std::ffi::c_void,
-    _reserved1: *mut std::ffi::c_void,
-    _reserved2: *mut std::ffi::c_void,
-    _reserved3: *mut std::ffi::c_void,
-    _funcs: [*mut std::ffi::c_void; 211],
-    get_direct_buffer_address: unsafe extern "C" fn(*mut JNIEnv, *mut std::ffi::c_void) -> *mut std::ffi::c_void,
-}
+use jni::objects::{JByteBuffer, JClass};
+use jni::sys::{jboolean, jfloat, jint};
+use jni::JNIEnv;
 
 #[unsafe(no_mangle)]
-pub extern "C" fn Java_com_nova_engine_NovaMainActivity_nativeInit(
-    _env: *mut std::ffi::c_void,
-    _class: *mut std::ffi::c_void,
+pub extern "system" fn Java_com_nova_engine_NovaMainActivity_nativeInit(
+    _env: JNIEnv,
+    _class: JClass,
 ) {
     init_android_session();
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn Java_com_nova_engine_NovaMainActivity_nativeResize(
-    _env: *mut std::ffi::c_void,
-    _class: *mut std::ffi::c_void,
-    width: i32,
-    height: i32,
+pub extern "system" fn Java_com_nova_engine_NovaMainActivity_nativeResize(
+    _env: JNIEnv,
+    _class: JClass,
+    width: jint,
+    height: jint,
 ) {
     resize_viewport(width, height);
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn Java_com_nova_engine_NovaMainActivity_nativeTouchInput(
-    _env: *mut std::ffi::c_void,
-    _class: *mut std::ffi::c_void,
-    stick_x: f32,
-    stick_y: f32,
-    jump_pressed: u8, // JNI jboolean
+pub extern "system" fn Java_com_nova_engine_NovaMainActivity_nativeTouchInput(
+    _env: JNIEnv,
+    _class: JClass,
+    stick_x: jfloat,
+    stick_y: jfloat,
+    jump_pressed: jboolean,
 ) {
     update_touch_input(stick_x, stick_y, jump_pressed != 0);
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn Java_com_nova_engine_NovaMainActivity_nativeGetPlayerPos(
-    env: *mut JNIEnv,
-    _class: *mut std::ffi::c_void,
-    out_direct_buffer: *mut std::ffi::c_void, // DirectByteBuffer
+pub extern "system" fn Java_com_nova_engine_NovaMainActivity_nativeGetPlayerPos(
+    env: JNIEnv,
+    _class: JClass,
+    out_direct_buffer: JByteBuffer,
 ) {
-    if env.is_null() || out_direct_buffer.is_null() {
-        return;
-    }
-    unsafe {
-        let get_addr = (*(*env).functions).get_direct_buffer_address;
-        let addr = get_addr(env, out_direct_buffer) as *mut f32;
-        if !addr.is_null() {
-            let guard = GLOBAL_SESSION.lock().unwrap();
-            if let Some(session) = guard.as_ref() {
-                *addr.offset(0) = session.character.position.x;
-                *addr.offset(1) = session.character.position.y;
-                *addr.offset(2) = session.character.position.z;
+    if let Ok(addr) = env.get_direct_buffer_address(&out_direct_buffer) {
+        let float_ptr = addr as *mut f32;
+        let guard = GLOBAL_SESSION.lock().unwrap();
+        if let Some(session) = guard.as_ref() {
+            unsafe {
+                *float_ptr.offset(0) = session.character.position.x;
+                *float_ptr.offset(1) = session.character.position.y;
+                *float_ptr.offset(2) = session.character.position.z;
             }
         }
     }
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn Java_com_nova_engine_NovaMainActivity_nativeStep(
-    env: *mut JNIEnv,
-    _class: *mut std::ffi::c_void,
-    dt: f32,
-    out_direct_buffer: *mut std::ffi::c_void, // DirectByteBuffer
-    max_floats: i32,
-) -> i32 {
+pub extern "system" fn Java_com_nova_engine_NovaMainActivity_nativeStep(
+    env: JNIEnv,
+    _class: JClass,
+    dt: jfloat,
+    out_direct_buffer: JByteBuffer,
+    max_floats: jint,
+) -> jint {
     let packet = step_simulation_and_get_render_data(dt);
-    if !env.is_null() && !out_direct_buffer.is_null() && max_floats > 0 {
+    if let Ok(addr) = env.get_direct_buffer_address(&out_direct_buffer) {
+        let float_ptr = addr as *mut f32;
+        let copy_len = packet.float_data.len().min(max_floats as usize);
         unsafe {
-            let get_addr = (*(*env).functions).get_direct_buffer_address;
-            let addr = get_addr(env, out_direct_buffer) as *mut f32;
-            if !addr.is_null() {
-                let copy_len = packet.float_data.len().min(max_floats as usize);
-                std::ptr::copy_nonoverlapping(packet.float_data.as_ptr(), addr, copy_len);
-            }
+            std::ptr::copy_nonoverlapping(packet.float_data.as_ptr(), float_ptr, copy_len);
         }
     }
-    packet.count as i32
+    packet.count as jint
 }
