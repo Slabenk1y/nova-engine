@@ -1,6 +1,34 @@
-[package]
-name = "nova-engine"
+[workspace]
+members = [
+    "crates/nova-core",
+    "crates/nova-math",
+    "crates/nova-physics",
+    "crates/nova-world",
+    "crates/nova-character",
+    "crates/nova-scripting",
+    "crates/nova-network",
+    "crates/nova-backend",
+    "crates/nova-creator",
+    "crates/nova-ui",
+    "crates/nova-runtime",
+    "crates/nova-app",
+    "experiences/nova_obby",
+    "experiences/nova_social_world",
+    "experiences/nova_simulator",
+    "experiences/nova_racing",
+]
+resolver = "2"
+
+[workspace.package]
 version = "0.1.0"
 edition = "2024"
+authors = ["NOVA Team"]
+license = "MIT OR Apache-2.0"
 
-[dependencies]
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+uuid = { version = "1.10", features = ["v4", "serde"] }
+sha2 = "0.10"
+chrono = { version = "0.4", features = ["serde"] }

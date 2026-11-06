@@ -1,0 +1,16 @@
+[package]
+name = "experience-nova-obby"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+nova-core = { path = "../../crates/nova-core" }
+nova-math = { path = "../../crates/nova-math" }
+nova-physics = { path = "../../crates/nova-physics" }
+nova-world = { path = "../../crates/nova-world" }
+nova-runtime = { path = "../../crates/nova-runtime" }
+nova-scripting = { path = "../../crates/nova-scripting" }
+serde.workspace = true
+serde_json.workspace = true

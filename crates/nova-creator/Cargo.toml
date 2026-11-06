@@ -1,0 +1,15 @@
+[package]
+name = "nova-creator"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+nova-core = { path = "../nova-core" }
+nova-math = { path = "../nova-math" }
+nova-physics = { path = "../nova-physics" }
+nova-world = { path = "../nova-world" }
+nova-scripting = { path = "../nova-scripting" }
+serde.workspace = true
+serde_json.workspace = true

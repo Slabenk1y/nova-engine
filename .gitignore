@@ -1,1 +1,9 @@
 /target
+backups/
+android/build/compiled_res/
+android/build/classes/
+android/build/dex/
+android/build/gen/
+android/build/nova-unaligned.apk
+android/build/outputs/
+android/keystore/
