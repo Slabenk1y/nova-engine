@@ -8,6 +8,7 @@ members = [
     "crates/nova-scripting",
     "crates/nova-network",
     "crates/nova-backend",
+    "crates/nova-renderer",
     "crates/nova-creator",
     "crates/nova-ui",
     "crates/nova-runtime",

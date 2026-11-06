@@ -362,6 +362,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "nova-renderer"
+version = "0.1.0"
+dependencies = [
+ "nova-core",
+ "nova-math",
+ "nova-world",
+]
+
+[[package]]
 name = "nova-runtime"
 version = "0.1.0"
 dependencies = [

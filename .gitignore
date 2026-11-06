@@ -7,3 +7,4 @@ android/build/gen/
 android/build/nova-unaligned.apk
 android/build/outputs/
 android/keystore/
+*.zip
